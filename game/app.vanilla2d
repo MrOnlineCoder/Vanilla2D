@@ -1,0 +1,14 @@
+# Vanilla2D Engine Application Config file
+# ----------------------------------------
+# Lines starting with # are ignored
+# Blank lines will also be ignored
+
+# screen size
+width = 1024
+height = 728
+
+# application title
+title = Test
+
+# FPS limit
+fps = 60

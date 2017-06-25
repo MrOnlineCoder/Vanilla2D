@@ -1,0 +1,27 @@
+﻿bg 1.png
+txt Hello! Welcome to Vanilla2D Engine Test Application! Click to continue.
+txt Vanilla2D supports long strings, so it wraps them with new lines like this: 1234567890qwertyuiopasdfghjkl;zxcvbnmqazwsxedc
+delay 2000
+txt That was a delay :)
+txt Vanilla2D supports font change too!
+font script2.ttf
+txt LIKE THIS!
+font script.ttf
+txt Ah, nevermind. That background must be changed!
+bg 2.png
+txt That's a way better!
+txt Oh, the text color is not good-looking with that background!
+text_color 255 255 255 255
+txt Much better!
+txt Also, too quiet here. Let's turn on the music player!
+music 1.ogg
+txt So nice nature sounds!
+txt Русский текст! 
+delay 1000
+txt ...
+delay 1000
+txt Some basic animations are supported, like fading in/out
+fade in 5
+delay 1500
+fade out 5
+txt Vanilla2D Engine by MrOnlineCoder. Visit GitHub repo: github.com/MrOnlineCoder/Vanilla2D
