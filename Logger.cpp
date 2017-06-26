@@ -30,7 +30,7 @@
 #include "Logger.h"
 
 
-const string Logger::m_sFileName = "Vanilla2DEngine.log";
+const string Logger::m_sFileName = "engine.log";
 Logger* Logger::m_pThis = NULL;
 ofstream Logger::m_Logfile;
 sf::Clock Logger::m_clock;
@@ -55,7 +55,7 @@ void Logger::Log(const std::string& tag, const char * format, ...)
     va_start(args, format);
     nLength = _vscprintf(format, args) + 1;
     sMessage = new char[nLength];
-    vsprintf_s(sMessage, nLength, format, args);
+    vsprintf(sMessage, format, args);
     m_Logfile << "[" << tag << " at " << m_clock.getElapsedTime().asSeconds() << "s] " << sMessage << "\n";
     va_end(args);
  

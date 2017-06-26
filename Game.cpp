@@ -29,6 +29,7 @@
 #include "Script.h"
 #include "Logger.h"
 #include "Utils.h"
+#include "Config.h"
 
 #include <locale>
 #include <string>
@@ -36,13 +37,15 @@
 #include <codecvt>
 
 
-Game::Game(std::vector<Statement>* _statements, int _width, int _height) {
+Game::Game(std::vector<Statement>* _statements, ConfigOptions _opts, std::string _root) {
 
 	//Reset class memebers to default
 	statements = _statements;
 	ip = -1;
-	windowWidth = _height;
-	windowWidth = _width;
+	opts = _opts;
+	root = _root;
+
+
 	hasPrintedText = false;
 	textPos = 0;
 	hideText = false;
@@ -52,20 +55,28 @@ Game::Game(std::vector<Statement>* _statements, int _width, int _height) {
 	debug = false;
 
 	//Setup text rect
-	textRect.setPosition(sf::Vector2f(16.f, (float) _height-16-128));
-	textRect.setSize(sf::Vector2f((float) _width-32.f, 128.f));
-	textRect.setFillColor(sf::Color(0,0,0,75)); //75!!
+	std::cout << opts.width << std::endl;
+
+	textRect.setPosition(sf::Vector2f(16.f, opts.height-16-128));
+	textRect.setSize(sf::Vector2f(opts.width-32.f, 128.f));
+	textRect.setFillColor(sf::Color(0,0,0,100)); //75!!
 	textRect.setOutlineThickness(2);
 	textRect.setOutlineColor(sf::Color(0,0,0,255));
 
-	fadeRect.setSize(sf::Vector2f(_width, _height));
+	fadeRect.setSize(sf::Vector2f(opts.width, opts.height));
 	fadeRect.setPosition(sf::Vector2f(0,0));
 	fadeRect.setFillColor(sf::Color::Black);
 
+	test.setPosition(sf::Vector2f(10,10));
+	test.setSize(sf::Vector2f(20,20));
+	test.setFillColor(sf::Color::Black);
+
+	LOGGER->Log("Game", "Got resRoot from Engine: '%s'", root.c_str());
+
 
 	//Load default font
-	if (!textFont.loadFromFile("game/fonts/script.ttf")) {
-		LOGGER->Log("Game","ERROR: Failed to load font game/fonts/script.ttf");
+	if (!textFont.loadFromFile(root + "/fonts/script.ttf")) {
+		LOGGER->Log("Game","ERROR: Failed to load font /fonts/script.ttf");
 	} else {
 		text.setFont(textFont);
 		text.setFillColor(sf::Color::Black);
@@ -106,7 +117,7 @@ void Game::nextStatement() {
 	//Execute current statement
 	Statement s = statements->at(ip);
 	if (s.type == StatementType::BACKGROUND) {
-		std::string path = "game/img/" + s.content;
+		std::string path = root + "/img/" + s.content;
 		if (!backgroundTex.loadFromFile(path)) {
 			LOGGER->Log("Game","ERROR: Failed to load background %s at statement %d", s.content.c_str(), ip);
 		} else {
@@ -134,8 +145,8 @@ void Game::nextStatement() {
 	}
 
 	if (s.type == StatementType::FONT) {
-		if (!textFont.loadFromFile("game/fonts/"+s.content)) {
-			LOGGER->Log("Game","ERROR: Failed to load background %s at statement %d", s.content.c_str(), ip);
+		if (!textFont.loadFromFile(root + "/fonts/"+s.content)) {
+			LOGGER->Log("Game","ERROR: Failed to load font %s at statement %d", s.content.c_str(), ip);
 		} else {
 			LOGGER->Log("Game","Changed font to %s", s.content.c_str());
 		}
@@ -145,12 +156,13 @@ void Game::nextStatement() {
 	if (s.type == StatementType::TEXT_COLOR) {
 		sf::Color c = Utils::parseColor(s.content);
 		text.setFillColor(c);
+		debugText.setFillColor(c);
 		LOGGER->Log("Game","Changed text color to RGBA(%d,%d,%d,%d)", c.r, c.g, c.b, c.a);
 		nextStatement();
 	}
 
 	if (s.type == StatementType::MUSIC) {
-		std::string path = "game/music/" + s.content;
+		std::string path = root + "/music/" + s.content;
 		if (!music.openFromFile(path)) {
 			LOGGER->Log("Game","ERROR: Failed to load music %s at statement %d", s.content.c_str(), ip);
 		} else {
@@ -252,6 +264,7 @@ void Game::render(sf::RenderWindow& window) {
 		window.draw(textRect);
 		window.draw(text);
 	}
+
 
 	if (debug) window.draw(debugText);
 

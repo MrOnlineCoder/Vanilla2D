@@ -33,6 +33,7 @@
 #include <vector>
 
 #include "Script.h"
+#include "Config.h"
 
 #include "FPS.h"
 class Game
@@ -41,10 +42,13 @@ public:
 	void handleInput(sf::Event e);
 	void render(sf::RenderWindow& window);
 	void update();
-	Game(std::vector<Statement>* _statements, int _width, int _height);
+	Game(std::vector<Statement>* _statements, ConfigOptions _opts, std::string _root);
 	void nextStatement();
 
 private:
+	ConfigOptions opts;
+	std::string root;
+
 	sf::Music music;
 
 	sf::Texture backgroundTex;
@@ -57,6 +61,7 @@ private:
 	std::vector<Statement>* statements;
 
 	sf::RectangleShape textRect;
+	sf::RectangleShape test;
 
 	sf::Text text;
 	sf::Font textFont;
@@ -72,8 +77,6 @@ private:
 	FPS fpsCounter;
 
 	int delay;
-	int windowWidth;
-	int windowHeight;
 
 	bool hideText;
 	bool fadeOn;

@@ -32,6 +32,25 @@
 
 #include <fstream>
 #include <sstream>
+#include <string>
+
+Engine::Engine(int argc, char* argv[]) {
+
+	resRoot = "game"; // default game root
+	//Parse command line arguments
+	for (int i=0;i<argc;i++) {
+		std::string opt(argv[i]);
+
+		//If opt is game, then set resources root
+		if (opt == "-game") {
+			//Check for bounds
+			if (i+1 < argc) {
+				resRoot = argv[i+1];
+				LOGGER->Log("Engine", "Game root is set to '%s'", resRoot.c_str());
+			}
+		}
+	}
+}
 
 int Engine::start()
 {
@@ -55,9 +74,8 @@ int Engine::start()
 	appFile >> windowHeight;
 	appFile >> fpsLimit;*/
 
-	ConfigOptions opts;
 	Config cfg;
-	opts = cfg.parse("game/app.vanilla2d");
+	opts = cfg.parse(resRoot + "/app.vanilla2d");
 
 	LOGGER->Log("Engine","App Name: %s",opts.title.c_str());
 	LOGGER->Log("Engine","Window Size: %d x %d", opts.width, opts.height);
@@ -69,7 +87,7 @@ int Engine::start()
 	Script script;
 
 	//Error check
-	if (!script.open("game/script.vanilla2d")) {
+	if (!script.open(resRoot + "/script.vanilla2d")) {
 		LOGGER->Log("Engine","ERROR: script file cannot be opened!");
 		return 1;
 	}
@@ -83,10 +101,7 @@ int Engine::start()
 	window.setFramerateLimit(opts.fps);
 
 	LOGGER->Log("Engine","Creating Game instance...");
-	Game game(&statements, opts.width, opts.height);
-
-
-	LOGGER->Log("Engine","Enetring window event loop...");
+	Game game(&statements, opts, resRoot);
 	while (window.isOpen()) {
 		sf::Event event;
 		while(window.pollEvent(event)) {

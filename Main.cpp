@@ -30,12 +30,12 @@
 #include "Logger.h"
 #include "Engine.h"
 
-int main()
+int main(int argc, char* argv[])
 {
 	LOGGER->Log("Main","STARTUP");
 
 	LOGGER->Log("Main","Creating engine instance...");
-	Engine engine;
+	Engine engine(argc, argv);
 
 	LOGGER->Log("Main","Starting game engine...");
 
