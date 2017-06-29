@@ -45,7 +45,6 @@ Game::Game(std::vector<Statement>* _statements, ConfigOptions _opts, std::string
 	opts = _opts;
 	root = _root;
 
-
 	hasPrintedText = false;
 	textPos = 0;
 	hideText = false;
@@ -53,9 +52,6 @@ Game::Game(std::vector<Statement>* _statements, ConfigOptions _opts, std::string
 	fade = 0;
 	fadeOn = false;
 	debug = false;
-
-	//Setup text rect
-	std::cout << opts.width << std::endl;
 
 	textRect.setPosition(sf::Vector2f(16.f, opts.height-16-128));
 	textRect.setSize(sf::Vector2f(opts.width-32.f, 128.f));

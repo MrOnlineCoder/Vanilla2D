@@ -15,6 +15,9 @@ Vanilla2D is very simple visual novel engine (currently, **without** labels/diff
 
 * Basic animations (fade in/out)
 
+Download binaries and game template: 
+[v1.0.0](https://github.com/MrOnlineCoder/Vanilla2D/releases/tag/v1.0.0)
+
 ## Project structure
 
 A Vanilla2D game/project is just a folder with all assets inside.
