@@ -1,0 +1,74 @@
+diff --git a/Logger.cpp b/Logger.cpp
+index 6144f2e..73b3762 100644
+--- a/Logger.cpp
++++ b/Logger.cpp
+@@ -29,6 +29,16 @@
+ #include "Logger.h"
+ #include "Logger.h"
+ 
++#ifdef __linux__
++int _vscprintf (const char * format, va_list pargs) {
++    int retval;
++    va_list argcopy;
++    va_copy(argcopy, pargs);
++    retval = vsnprintf(NULL, 0, format, argcopy);
++    va_end(argcopy);
++    return retval;
++}
++#endif
+ 
+ const string Logger::m_sFileName = "engine.log";
+ Logger* Logger::m_pThis = NULL;
+@@ -71,4 +81,4 @@ Logger& Logger::operator<<(const string& sMessage)
+ {
+    m_Logfile << "[" << "Default" << " at " <<  m_clock.getElapsedTime().asSeconds() << "s] " << sMessage << "\n";
+     return *this;
+-}
+\ No newline at end of file
++}
+diff --git a/Logger.h b/Logger.h
+index 79f871d..e5f2641 100644
+--- a/Logger.h
++++ b/Logger.h
+@@ -36,6 +36,10 @@
+ 
+ using namespace std;
+ 
++#ifdef __linux__
++int _vscprintf (const char * format, va_list pargs); 
++#endif
++
+ #define LOGGER Logger::GetLogger()
+ class Logger
+ {
+@@ -57,4 +61,4 @@ private:
+ 
+ 	static sf::Clock m_clock;
+ };
+-#endif
+\ No newline at end of file
++#endif
+diff --git a/Makefile b/Makefile
+index c4f7b1f..af7f934 100644
+--- a/Makefile
++++ b/Makefile
+@@ -6,6 +6,8 @@
+ # Any help on contributing cross platform support is welcomed
+ # -----------------------------------------------------------
+ 
++OS = $(shell uname)
++
+ # Files to compile
+ SRC_PRIMARY = Main.cpp Game.cpp Engine.cpp Script.cpp
+ SRC_SECONDARY = Utils.cpp Logger.cpp FPS.cpp Config.cpp ConfigParser.cpp
+@@ -26,4 +28,8 @@ SFML_INCLUDE_PATH=
+ SFML_LIBS_PATH=
+ 
+ all:
+-	g++ $(STD) -I"$(SFML_INCLUDE_PATH)" -L"$(SFML_LIBS_PATH)" $(SRC_PRIMARY) $(SRC_SECONDARY) -o $(BIN)
+\ No newline at end of file
++ifeq ($(OS), Linux)
++	g++ $(STD) $(LIBS) $(SRC_PRIMARY) $(SRC_SECONDARY) -o $(BIN)
++else
++	g++ $(STD) -I"$(SFML_INCLUDE_PATH)" -L"$(SFML_LIBS_PATH)" $(SRC_PRIMARY) $(SRC_SECONDARY) -o $(BIN)
++endif

@@ -29,6 +29,16 @@
 #include "Logger.h"
 #include "Logger.h"
 
+#ifdef __linux__
+int _vscprintf (const char * format, va_list pargs) {
+    int retval;
+    va_list argcopy;
+    va_copy(argcopy, pargs);
+    retval = vsnprintf(NULL, 0, format, argcopy);
+    va_end(argcopy);
+    return retval;
+}
+#endif
 
 const string Logger::m_sFileName = "engine.log";
 Logger* Logger::m_pThis = NULL;

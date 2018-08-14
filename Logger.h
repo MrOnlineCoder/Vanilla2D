@@ -36,6 +36,10 @@
 
 using namespace std;
 
+#ifdef __linux__
+int _vscprintf (const char * format, va_list pargs); 
+#endif
+
 #define LOGGER Logger::GetLogger()
 class Logger
 {
