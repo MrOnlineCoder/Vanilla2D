@@ -6,6 +6,8 @@
 # Any help on contributing cross platform support is welcomed
 # -----------------------------------------------------------
 
+OS = $(shell uname)
+
 # Files to compile
 SRC_PRIMARY = Main.cpp Game.cpp Engine.cpp Script.cpp
 SRC_SECONDARY = Utils.cpp Logger.cpp FPS.cpp Config.cpp ConfigParser.cpp
@@ -26,4 +28,8 @@ SFML_INCLUDE_PATH=
 SFML_LIBS_PATH=
 
 all:
+ifeq ($(OS), Linux)
+	g++ $(STD) $(LIBS) $(SRC_PRIMARY) $(SRC_SECONDARY) -o $(BIN)
+else
 	g++ $(STD) -I"$(SFML_INCLUDE_PATH)" -L"$(SFML_LIBS_PATH)" $(SRC_PRIMARY) $(SRC_SECONDARY) -o $(BIN)
+endif
