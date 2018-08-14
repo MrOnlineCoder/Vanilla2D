@@ -108,3 +108,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 * Foaly for SettingsParser class - [GitHub](https://github.com/SFML/SFML/wiki/Source:-Settings-Parser)
 
 * BarrensZeppelin for FPS counter class - [GitHub](https://github.com/SFML/SFML/wiki/Source:-FPS)
+
+* jedi2light (Stoyan Minaev) for porting to Linux
